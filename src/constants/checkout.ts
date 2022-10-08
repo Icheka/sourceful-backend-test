@@ -1,0 +1,1 @@
+export const CHECKOUT_TAX_PERCENTAGE = 14;
