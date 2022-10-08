@@ -67,7 +67,7 @@ export const HomeView: FunctionComponent = () => {
                 {
                     bill !== null && (
                         <div className={`w-full mb-4 rounded-xl border border-green-600 bg-green-100 relative text-gray-800 px-4 py-2 space-y-1`}>
-                            <button onClick={() => setBill(null)} className='absolute -right-3 bg-white rounded-full p-2 border border-red-500 -top-3'>
+                            <button onClick={() => setBill(null)} className='absolute -right-3 bg-white rounded-full p-2 border border-green-500 -top-3'>
                                 <FaTimes />
                             </button>
                             {
@@ -77,7 +77,7 @@ export const HomeView: FunctionComponent = () => {
                                             {k}:
                                         </div>
                                         <div className='font-medium'>
-                                            {typeof v === 'number' && `$${v.toFixed(2)}`}
+                                            {typeof v === 'number' && `$${v.toFixed(4)}`}
                                             {Array.isArray(v) && (
                                                 <ul>
                                                     {

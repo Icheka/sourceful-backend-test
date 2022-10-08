@@ -1,0 +1,38 @@
+version: "3.2"
+services:
+  api:
+    build:
+      context: ../api
+    image: api
+    container_name: api
+    ports:
+      - "4000:4000"
+    networks:
+      - sourceful
+    volumes:
+      - type: bind
+        source: ..
+        target: /app
+    command: sh -c "chmod +x ./start.sh && ./start.sh"
+    stdin_open: true
+    tty: true
+
+  client:
+    build:
+      context: ../client
+    image: client
+    container_name: client
+    ports:
+      - "3000:3000"
+    networks:
+      - sourceful
+    command: sh -c "chmod +x ./start.sh && ./start.sh"
+    stdin_open: true
+    tty: true
+
+networks:
+  sourceful:
+    name: sourceful
+    driver: bridge
+    ipam:
+      driver: default
