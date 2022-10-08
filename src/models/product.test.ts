@@ -51,8 +51,8 @@ test('removeProductFromList', () => {
 });
 
 test('processProductsBill', async () => {
-    const PINEAPPLE_DISCOUNT_MSG = '10% off Pineapple';
-    const STRAWBERRY_DISCOUNT_MSG = '50% off Strawberry';
+    const PINEAPPLE_DISCOUNT_MSG = '10% off Pineapple: -$2.499';
+    const STRAWBERRY_DISCOUNT_MSG = '50% off Strawberry: -$9.995';
 
     const iters: Array<{
         productList: Array<string>;

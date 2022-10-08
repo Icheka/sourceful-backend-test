@@ -88,6 +88,9 @@ export const processProductsBill = async (products: Array<string>): Promise<TBil
     // 'total' is the amount payable by the customer. It is 'subTotal' + 'tax' - 'discounts'
     let total = 0;
 
+    const pushDiscountMessage = (message: string, discountAmount: number) => {
+        if (message !== undefined) discountMessages.push(`${message}: -$${discountAmount}`);
+    }
 
     // apply multi-item discounts first
     // as discounts are applied, progressively eliminate the product(s) from the 'products' array
@@ -119,8 +122,7 @@ export const processProductsBill = async (products: Array<string>): Promise<TBil
                         products = removeProductFromList('Strawberry', products);
 
                         // push message to discountMessages
-                        const message = event.params?.message;
-                        if (message !== undefined) discountMessages.push(`${message}: -$${bill.discount}`);
+                        pushDiscountMessage(event.params?.message, bill.discount);
                     } else {
                         // break loop if there are no more Strawberries
                         break
@@ -133,24 +135,15 @@ export const processProductsBill = async (products: Array<string>): Promise<TBil
         }
     }
 
+    // process the other products
     for (const productName of products) {
-        // apply single-item discounts
         const events = await SingleItemDiscountsEngine
             .run({ productName })
             .then(({ events }) => events);
+        const message: string | null = events.length > 0 ? events[0].params?.message ?? null : null;
 
-        const discountPercentage = await SingleItemDiscountsEngine
-            .run({ productName })
-            .then(({ events }) => {
-                if (events.length > 0) {
-                    const event = events[0];
-                    const message = event.params?.message;
-                    
-                    if (message !== undefined) discountMessages.push(message);
-                    return event?.params?.discountPercentage;
-                }
-                return 0;
-            }) ?? 0;
+        // handle any discounts, but default to 0% if there isn't one
+        const discountPercentage: number = events.length > 0 ? events[0].params?.discountPercentage ?? 0 : 0;
         
         const product = findProduct(productName);
         // if productName not found in DB, skip
@@ -162,6 +155,11 @@ export const processProductsBill = async (products: Array<string>): Promise<TBil
         subTotal = bill.subTotal;
         taxes += (CHECKOUT_TAX_PERCENTAGE/100) * product.amount;
         discounts += bill.discount;
+
+        // push message to discountMessages
+        if (message !== null) pushDiscountMessage(message, bill.discount);
+
+        products = removeProductFromList(productName, products);
     }
     total = subTotal + taxes - discounts;
 
