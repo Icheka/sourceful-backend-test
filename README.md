@@ -66,7 +66,7 @@ Both `/client` and `/api` contain a `Dockerfile` file that provides configuratio
 To start the services:
 
 1. Ensure Docker is installed ([see here for instructions for installing Docker on your computer/server](https://docs.docker.com/desktop/install))
-2. Run `docker --version` to ensure Docker is configured properly. If an error is outputed, you might need to uninstall/unlink and re-install Docker
+2. Run `docker --version` to ensure Docker is configured properly. If an error is displayed, you might need to uninstall/unlink and re-install Docker
 3. Ensure `Make` is installed. If it isn't, a quick Google search will present you with directions for installing and configuring `Make`
 4. In the root directory of the mono-repo, run `make start`
 
