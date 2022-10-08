@@ -9,7 +9,6 @@ up:
 
 logs:
 	docker logs -f api
-	docker logs -f client
 
 clean:
 	docker stop api
